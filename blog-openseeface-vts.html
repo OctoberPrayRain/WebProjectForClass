@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基于Openseeface方法的在Archlinux系统下绕过VTS直接进行面部检测 | 十月祈雨</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body data-blog-id="openseeface-vts">
+    <canvas id="starCanvas" aria-hidden="true"></canvas>
+    <div class="soft-light" aria-hidden="true"></div>
+
+    <header class="blog-hero-detail">
+        <nav class="nav paper-card">
+            <a class="brand" href="./index.html#top">十月祈雨</a>
+            <div class="nav-links" aria-label="页面导航">
+                <a href="./index.html#blog">返回首页</a>
+                <a href="./index.html#projects">项目集</a>
+                <a href="./index.html#contact">联系方式</a>
+            </div>
+        </nav>
+
+        <article class="article-shell paper-card reveal">
+            <p class="eyebrow">折腾记录 · Arch Linux</p>
+            <h1>基于Openseeface方法的在Archlinux系统下绕过VTS直接进行面部检测使用VTS虚拟形象的方法</h1>
+            
+            <section class="article-section">
+                <h2>摘要 Abstract</h2>
+                <p>VTS采用经典的Openseeface方法来进行面部检测，但是这样的检测方式如果自行配置的话在Windows环境下对用户非常的不友好，于是VTS自行做了封装。而Archlinux下的用户明显是没法享受到这一用户便利性封装的（图形GPU的API方法不同）因此如果想要在Archlinux下使用VTS进行虚拟形象直播，需要深入了解Openseeface方法的基本原理。</p>
+            </section>
+
+            <section class="article-section">
+                <h2>方法 Methods</h2>
+                <h3>1. 在AUR仓库下载openseeface-bin</h3>
+                <p>直接使用yay即可：<code>yay -S openseeface-git</code></p>
+                <p>下载好了以后，使用 <code>facetracker</code> 命令即可启用openseeface。</p>
+
+                <h3>2. 配置网络连接直链VTS</h3>
+                <p>在下载好了openseeface以后，VTS是没有办法直接检测到OSF的连接的，我们需要手动进行配置。根据官方Wiki介绍，需要在VTS的目录下自行创建 <code>ip.txt</code> 文件，内容如下：</p>
+                <pre><code>ip=0.0.0.0
+port=11573</code></pre>
+                <p>这里的port是官方推荐的port，无脑使用即可。</p>
+
+                <h3>3. 配置Openseeface的命令</h3>
+                <p>推荐配置：</p>
+                <pre><code>facetracker -c 2 -i 127.0.0.1 -p 11573 -W 640 -H 480 --model 3 --fps 30 --pnp-points 1</code></pre>
+                <p>参数解释：<code>-c</code> 是摄像头编号（<code>-c 0</code> 一般是自带摄像头，<code>-c 2</code> 是我的外接摄像头）；<code>-i</code> 是网络ip；<code>-p</code> 是端口；<code>-W -H</code> 即摄像头捕捉的长宽；<code>--model</code> 捕捉模型（-1到3）；<code>--fps</code> 帧率；<code>--pnp-points 1</code> 优化参数。</p>
+                
+                <p>推荐原因：</p>
+                <div class="article-image-container">
+                    <img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YmEzZWZiYjg1NGZkZTlkYzEwMTM4OTcwYzIxOGUwZDJfZGRlMmU3NTk1Yjg3ZjhlZTMwNjBjNGVjMTFiYmFiYTBfSUQ6NzYxNzIwNTc0MTg1Nzg1MjYzOF8xNzgwMTAyODk5OjE3ODAxODkyOTlfVjM" alt="OpenSeeFace配置图1">
+                </div>
+                <p>个人配置了一下threshold = 0.3，方便置信度低于百分之三十的推理结果直接被舍弃。</p>
+                <div class="article-image-container">
+                    <img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDk2ZTBkMjI4ODUyOGJhNWU0NTMyMDY4Mjc1NDMzMTVfNzE1ZTJmNjAxMTgwNzJjZTg4MmRmZDM0YWQzODYwNDNfSUQ6NzYxNzIwNzI1MDAwNTQxMjgyN18xNzgwMTAyODk5OjE3ODAxODkyOTlfVjM" alt="OpenSeeFace配置图2">
+                </div>
+                <p>为了方便，还可以把facetracker设置为systemd，开机自启动后台运行：</p>
+                <div class="article-image-container">
+                    <img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjY5NGYzYzFkZjllNjdhODhjYjllMmY2MzdjMTVjNjlfMzA0YzJmZjRkZmRhNWI4YjAyNjhmMmQ1OTYzYTQ1MWFfSUQ6NzYxNzIwNzUxMTkyMTIzMjg1Nl8xNzgwMTAyODk5OjE3ODAxODkyOTlfVjM" alt="OpenSeeFace配置图3">
+                </div>
+
+                <h3>4. 检查细致结果</h3>
+                <p>脸部推理乱飘通常是因为AI没能识别到眼窝与鼻梁线，这很大程度上依赖合适的光源。太暗或太曝都有可能影响结果。可能需要添加 <code>-v 1</code> 参数来直接读取摄像头原生画面来判断，这通常和 v4l2-ctl 的设置有关。</p>
+
+                <h3>5. 使用</h3>
+                <p>配置好后启动VTS，在Live2d界面选择摄像头的选单会被替换为OpenSeeFace - Network。如果发现没有出现，请检查 ip.txt 端口是否一致。</p>
+                <div class="article-image-container">
+                    <img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZGNlOWVmMzIzMGIyNTkwMTJiMWE0NzUxMjM5YWQyYTVfYjE1M2U0ZDVmMTFhMjA0MDE5ZDY4ZjRiOWJmNDcwZDRfSUQ6NzYxNzIwNjc3OTgzOTA0MDcwM18xNzgwMTAyODk5OjE3ODAxODkyOTlfVjM" alt="VTS使用图1">
+                </div>
+                <p>导入合适的Live2D形象即可正常使用。</p>
+                <div class="article-image-container">
+                    <img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTNlZTg2MDMzZDBjZDE4MTE2NTE3MWJlNjZiMzg4ZWFfNGVhNmM2ODk2NmJlOWMyYjc2Y2M3NWZhMTg5NTczOGRfSUQ6NzYxNzIwNzY0NjAwODkyMTMxMF8xNzgwMTAyODk5OjE3ODAxODkyOTlfVjM" alt="VTS使用图2">
+                </div>
+            </section>
+
+            <section class="article-actions paper-card">
+                <button class="like-button" type="button" data-like-button>♡ 点赞 <span data-like-count>0</span></button>
+                <form class="comment-form" data-comment-form>
+                    <label for="comment-textarea">发表评论</label>
+                    <textarea id="comment-textarea" name="comment" rows="4" placeholder="留下第一条评论吧..." required></textarea>
+                    <button class="primary-btn" type="submit">发布</button>
+                </form>
+                <div class="comment-list" data-comment-list aria-live="polite"></div>
+            </section>
+        </article>
+    </header>
+
+    <script src="./script.js"></script>
+</body>
+</html>

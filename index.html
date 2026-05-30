@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>十月祈雨 | AmeoInoru 的星雨手账</title>
+    <title>十月祈雨 | 个人技术博客</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
             <a class="brand" href="#top">十月祈雨</a>
             <div class="nav-links" aria-label="页面导航">
                 <a href="#profile">档案</a>
-                <a href="#blog">手账</a>
+                <a href="#blog">博客</a>
                 <a href="#projects">项目</a>
                 <a href="#contact">联系</a>
             </div>
@@ -24,11 +24,11 @@
         <section class="hero-layout">
             <div class="hero-copy reveal">
                 <p class="eyebrow">AmeoInoru · ECJTU Student Developer</p>
-                <h1>把代码、笔记和喜欢的世界，收进一册星雨手账。</h1>
-                <p class="subtitle">Knowledge is infinite. 但今天先写下一页。</p>
+                <h1>十月祈雨的个人技术博客</h1>
+                <p class="subtitle">Knowledge is infinite. 记录学习与开发中的点滴。</p>
                 <p class="intro">
-                    这里是十月祈雨的个人博客首页：记录算法练习、AI 工具、Linux 桌面折腾、游戏翻译小工具，
-                    也放一点 B 站与二次元灵感。比起炫技，更想让老师一眼看到「这是我自己的页面」。
+                    这里是十月祈雨的个人技术主页，主要记录算法练习、Linux 桌面配置、套接字网络编程等内容，
+                    沉淀个人的技术积累与实践。
                 </p>
                 <div class="hero-actions">
                     <a class="primary-btn" href="https://github.com/OctoberPrayRain" target="_blank" rel="noopener noreferrer">GitHub 项目集</a>
@@ -38,7 +38,7 @@
 
             <aside class="profile-card paper-card reveal delay-1" id="profile">
                 <div class="avatar-frame">
-                    <img src="./assets/avatar.jpg" alt="AmeoInoru 的二次元头像">
+                    <img src="./assets/avatar.jpg" alt="AmeoInoru 的头像">
                 </div>
                 <p class="profile-kicker">十月祈雨的个人空间</p>
                 <h2>AmeoInoru</h2>
@@ -47,7 +47,7 @@
                     <li><strong>学校</strong><span>East China Jiao Tong University</span></li>
                     <li><strong>坐标</strong><span>江西 · 南昌</span></li>
                     <li><strong>常用栈</strong><span>Python / C / QML / Web</span></li>
-                    <li><strong>关键词</strong><span>AI 工具、Arch、游戏翻译、算法</span></li>
+                    <li><strong>关键词</strong><span>C++、Arch Linux、网络编程、算法</span></li>
                 </ul>
             </aside>
         </section>
@@ -74,46 +74,37 @@
 
         <section class="section" id="blog">
             <div class="section-heading reveal">
-                <p>Local Notes</p>
-                <h2>从本地内容整理出的博客手账</h2>
-                <span>不是空泛的介绍，而是从电脑里的项目和学习记录提炼出的文章卡片。</span>
+                <p>Technical Blog</p>
+                <h2>个人技术博客</h2>
+                <span>记录在日常学习、课程设计和项目实践中遇到的问题与解决方案。</span>
             </div>
             <div class="blog-grid">
-                <article class="blog-card feature reveal">
-                    <div class="tag-row"><span>工具开发</span><span>RainyOCR</span></div>
-                    <h3>给游戏文本做一个安静的 OCR 翻译窗口</h3>
-                    <p>从框选区域、截图识别、翻译弹窗到系统托盘，把 Galgame / RPGMaker 固定文本窗口变成更顺手的阅读体验。</p>
-                    <time>Python · PySide6 · OCR</time>
-                </article>
-                <article class="blog-card reveal delay-1">
-                    <div class="tag-row"><span>AI 字幕</span></div>
-                    <h3>RainyASR：实时字幕悬浮窗的想法</h3>
-                    <p>系统音频捕获、实时 ASR、双语字幕、全局快捷键，目标是看视频时不打断当前窗口。</p>
-                    <time>Python · Qt · ASR</time>
-                </article>
-                <article class="blog-card reveal delay-2">
-                    <div class="tag-row"><span>Linux 桌面</span></div>
-                    <h3>RainyArch：把桌面配置备份成作品</h3>
-                    <p>Hyprland、SDDM、Yazi、bash 命令和 .desktop 文件，都像是给电脑写的一套个人设定集。</p>
-                    <time>Arch Linux · Hyprland</time>
-                </article>
+                <a class="blog-card feature reveal" href="./blog-cmake-mingw.html">
+                    <div class="tag-row"><span>C++ 环境</span><span>CMake</span></div>
+                    <h3>基于 CMake Tools 的 MinGW C++ 环境快速配置</h3>
+                    <p>记录 MinGW-w64、Ninja、VSCode 插件、CMakeLists.txt、launch.json 与 tasks.json 的配置过程。</p>
+                    <time>Windows · MinGW · CMake Tools</time>
+                    <span class="read-more">阅读全文 →</span>
+                </a>
+                <a class="blog-card reveal delay-1" href="./blog-openseeface-vts.html">
+                    <div class="tag-row"><span>Arch Linux</span><span>VTS</span></div>
+                    <h3>Arch Linux 下使用 OpenSeeFace 连接 VTS</h3>
+                    <p>记录在 Arch Linux 中配置 OpenSeeFace、创建 VTS 网络连接、调整摄像头参数与光线问题的过程。</p>
+                    <time>Arch · OpenSeeFace · Live2D</time>
+                    <span class="read-more">阅读全文 →</span>
+                </a>
+                <a class="blog-card reveal delay-2" href="./blog-socket-chat.html">
+                    <div class="tag-row"><span>课程设计</span><span>Socket</span></div>
+                    <h3>基于 C/S 套接字编程实现简单聊天程序</h3>
+                    <p>大二下计算机网络课程设计记录，从 Winsock 初始化、监听连接到后续 WebSocket 测试。</p>
+                    <time>C++ · Winsock · WebSocket</time>
+                    <span class="read-more">阅读全文 →</span>
+                </a>
                 <article class="blog-card reveal">
                     <div class="tag-row"><span>学习笔记</span></div>
-                    <h3>错题本和神经网络实验：把不会的地方留下来</h3>
-                    <p>高数错题本、PyTorch 环境配置、欠拟合与过拟合实验，都是“今天多懂一点”的证据。</p>
+                    <h3>错题本和神经网络实验记录</h3>
+                    <p>包括高数错题总结、PyTorch 本地环境配置、以及欠拟合与过拟合的相关实验记录。</p>
                     <time>Math · PyTorch · Notes</time>
-                </article>
-                <article class="blog-card reveal delay-1">
-                    <div class="tag-row"><span>桌面应用</span></div>
-                    <h3>花笺：轻量便签也可以有温柔的界面</h3>
-                    <p>Markdown 编辑、快捷便签、磁贴模式和本地导入导出，适合记录游戏、视频和临时灵感。</p>
-                    <time>Tauri · React · Rust</time>
-                </article>
-                <article class="blog-card reveal delay-2">
-                    <div class="tag-row"><span>游戏工具</span></div>
-                    <h3>Calabiyau-Rolling：战术部署也要有仪式感</h3>
-                    <p>用 QML 做随机地图与角色抽取，把游戏里的队伍分配做成一个可视化终端。</p>
-                    <time>QML · Game Tool</time>
                 </article>
             </div>
         </section>
@@ -124,21 +115,24 @@
                 <h2>作品书架</h2>
             </div>
             <div class="project-board">
-                <article class="project-card paper-card reveal">
+                <a class="project-card paper-card reveal" href="https://github.com/OctoberPrayRain/RainyOCR" target="_blank" rel="noopener noreferrer">
                     <span class="project-number">A</span>
                     <h3>RainyOCR</h3>
-                    <p>屏幕区域 OCR + 翻译弹窗，面向游戏和漫画阅读场景。</p>
-                </article>
-                <article class="project-card paper-card reveal delay-1">
+                    <p>A low-interruption OCR translation tool. / 一个低打扰的 OCR 翻译工具。</p>
+                    <span class="read-more">打开 GitHub →</span>
+                </a>
+                <a class="project-card paper-card reveal delay-1" href="https://github.com/OctoberPrayRain/DailyAlgorithm" target="_blank" rel="noopener noreferrer">
                     <span class="project-number">B</span>
                     <h3>DailyAlgorithm</h3>
-                    <p>用每日练习维持算法手感，让基础能力不断刷新。</p>
-                </article>
-                <article class="project-card paper-card reveal delay-2">
+                    <p>[P.A.Q.E.D] Practice Algorithm Quests Every Day.</p>
+                    <span class="read-more">打开 GitHub →</span>
+                </a>
+                <a class="project-card paper-card reveal delay-2" href="https://github.com/OctoberPrayRain/RainyArch" target="_blank" rel="noopener noreferrer">
                     <span class="project-number">C</span>
                     <h3>RainyArch</h3>
-                    <p>把系统配置、桌面美化和常用脚本沉淀成可复用资料。</p>
-                </article>
+                    <p>My Archlinux Profiles / 我的 Archlinux 配置文件。</p>
+                    <span class="read-more">打开 GitHub →</span>
+                </a>
             </div>
         </section>
     </main>
@@ -146,7 +140,7 @@
     <footer class="footer paper-card reveal" id="contact">
         <div>
             <p class="eyebrow">Transmission Channel</p>
-            <h2>愿下一场星雨，也落在代码和手账里。</h2>
+            <h2>记录、沉淀、成长。</h2>
         </div>
         <div class="footer-links">
             <a href="https://github.com/OctoberPrayRain" target="_blank" rel="noopener noreferrer">GitHub</a>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基于C/S套接字编程实现简单聊天程序 | 十月祈雨</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body data-blog-id="socket-chat">
+    <canvas id="starCanvas" aria-hidden="true"></canvas>
+    <div class="soft-light" aria-hidden="true"></div>
+
+    <header class="blog-hero-detail">
+        <nav class="nav paper-card">
+            <a class="brand" href="./index.html#top">十月祈雨</a>
+            <div class="nav-links" aria-label="页面导航">
+                <a href="./index.html#blog">返回首页</a>
+                <a href="./index.html#projects">项目集</a>
+                <a href="./index.html#contact">联系方式</a>
+            </div>
+        </nav>
+
+        <article class="article-shell paper-card reveal">
+            <p class="eyebrow">课程设计 · TCP/IP</p>
+            <h1>基于C/S套接字编程实现简单聊天程序</h1>
+            
+            <section class="article-section">
+                <h2>前言</h2>
+                <p>这是我在大二下学期学完了计算机网络后需要进行的课程设计，这个题目相对而言还算比较简单，于此存档记录。</p>
+            </section>
+
+            <section class="article-section">
+                <h2>关键词</h2>
+                <p><strong>①C/S模式：</strong> Client / Server模式，即客户端-服务器通信模式</p>
+                <p><strong>②套接字：</strong> 即Windows Sockets,是Windows下网络编程的规范，为基于Windows开发平台的、得到广泛应用、开放、支持多种协议的网络编程接口</p>
+                <p><strong>③套接口：</strong> 套接字编程接口，即Socket编程接口。套接口是对网络中不同主机上应用进程之间进行双向通信的端点的抽象。</p>
+                <div class="article-image-container">
+                    <img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NjdkODM0Mzg4NWYwZjZkN2IwN2I3NjczYzU2YjE4MWVfMDc2MWRlNmJlY2VkM2U2YzZkYTg1MTdlZDNhZjg5ZjVfSUQ6NzUxMzU0MjQ5NDI0MDU3MTM5M18xNzgwMTAyODUxOjE3ODAxODkyNTFfVjM" alt="Socket原理示意图">
+                </div>
+            </section>
+
+            <section class="article-section">
+                <h2>原理</h2>
+                <p>网络进程间面向连接的通信方式基于TCP，因而必须借助流式套接字来编程，应用程序分为服务器端和客户机端。双方都首先要创建并安装套接字，做好准备后，才能进行客户端与服务器端的通信。</p>
+                <div class="article-image-container">
+                    <img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzFiYzY2ZWU1NDY4Yzg4OTNjNzNkMmYwZmE2YmMwYjNfNWRiOTc5MjcyMTYyZjg2ZmJhOTQwOTVkNWM1YWFmYWZfSUQ6NzUxMzU0ODQ3NDMxMTMxMTM2NF8xNzgwMTAyODUxOjE3ODAxODkyNTFfVjM" alt="套接字操作步骤1">
+                </div>
+                <div class="article-image-container">
+                    <img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmFhYjYwNzgyYzYwZDEwOTdlZmZlMWE4Mjk3ZjQ0NmVfZjc1NDViNGYzY2VhODQxYThmZTM5ZmZiMmUzNzU5MmNfSUQ6NzUxMzU0ODY3MjU5ODkxNzEyM18xNzgwMTAyODUxOjE3ODAxODkyNTFfVjM" alt="套接字操作步骤2">
+                </div>
+            </section>
+
+            <section class="article-section">
+                <h2>实现过程（服务器端）</h2>
+                <p>Winsock编程必须先调用 <code>WSAStartup()</code> 初始化库，程序结束时调用 <code>WSACleanup()</code> 释放资源。随后通过 <code>socket()</code>、<code>bind()</code>、<code>listen()</code> 等步骤让服务器进入监听状态。</p>
+                <pre><code>// 初始化与创建套接字示例
+WSADATA wsaData;
+WSAStartup(MAKEWORD(2,2),&wsaData);
+SOCKET serverSocket = socket(AF_INET,SOCK_STREAM,0);</code></pre>
+            </section>
+
+            <section class="article-section">
+                <h2>WebSocket 优化</h2>
+                <p>后期尝试将后端扩展为 WebSocket 服务器，使用 WebSocket++ 库。运行 HTML 测试页面后，通过控制台确认连接成功：</p>
+                <div class="article-image-container">
+                    <img src="https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzUxOWJmZTcwODI1NjhjZWJkMjA5MjU1YWZiNjc3NzZfOTRkOTk5MTNlYjhlMmNjNzFjZWQ1YzU0N2E0MTZiMGRfSUQ6NzUxNzI1Njk3Nzk4NzM3MTAwOV8xNzgwMTAyODUxOjE3ODAxODkyNTFfVjM" alt="WebSocket 连接测试">
+                </div>
+            </section>
+
+            <section class="article-actions paper-card">
+                <button class="like-button" type="button" data-like-button>♡ 点赞 <span data-like-count>0</span></button>
+                <form class="comment-form" data-comment-form>
+                    <label for="comment-textarea">发表评论</label>
+                    <textarea id="comment-textarea" name="comment" rows="4" placeholder="留下第一条评论吧..." required></textarea>
+                    <button class="primary-btn" type="submit">发布</button>
+                </form>
+                <div class="comment-list" data-comment-list aria-live="polite"></div>
+            </section>
+        </article>
+    </header>
+
+    <script src="./script.js"></script>
+</body>
+</html>
