@@ -4,6 +4,31 @@ const revealItems = document.querySelectorAll('.reveal');
 
 let petals = [];
 
+function createStorage() {
+    const memoryStore = new Map();
+
+    try {
+        const testKey = '__blog_storage_test__';
+        localStorage.setItem(testKey, testKey);
+        localStorage.removeItem(testKey);
+        return localStorage;
+    } catch (error) {
+        return {
+            getItem(key) {
+                return memoryStore.has(key) ? memoryStore.get(key) : null;
+            },
+            setItem(key, value) {
+                memoryStore.set(key, String(value));
+            },
+            removeItem(key) {
+                memoryStore.delete(key);
+            }
+        };
+    }
+}
+
+const storage = createStorage();
+
 function resizeCanvas() {
     if (!canvas) {
         return;
@@ -86,6 +111,18 @@ function renderComments(list, comments) {
     `).join('');
 }
 
+function setLikeButtonText(button, liked) {
+    const label = liked ? '♥ 已赞 ' : '♡ 点赞 ';
+    const textNode = Array.from(button.childNodes).find((node) => node.nodeType === Node.TEXT_NODE);
+
+    if (textNode) {
+        textNode.textContent = label;
+        return;
+    }
+
+    button.insertBefore(document.createTextNode(label), button.firstChild);
+}
+
 function setupBlogInteractions() {
     const blogId = document.body.dataset.blogId;
     if (!blogId) {
@@ -100,16 +137,23 @@ function setupBlogInteractions() {
     const likedKey = `diary-liked-${blogId}`;
     const commentsKey = `diary-comments-${blogId}`;
 
-    const getComments = () => JSON.parse(localStorage.getItem(commentsKey) || '[]');
+    const getComments = () => {
+        try {
+            const comments = JSON.parse(storage.getItem(commentsKey) || '[]');
+            return Array.isArray(comments) ? comments : [];
+        } catch (error) {
+            return [];
+        }
+    };
     const updateLikeView = () => {
-        const count = Number(localStorage.getItem(likeKey) || '0');
-        const liked = localStorage.getItem(likedKey) === 'true';
+        const count = Number(storage.getItem(likeKey) || '0');
+        const liked = storage.getItem(likedKey) === 'true';
         if (likeCount) {
             likeCount.textContent = String(count);
         }
         if (likeButton) {
             likeButton.classList.toggle('liked', liked);
-            likeButton.firstChild.textContent = liked ? '♥ 已赞 ' : '♡ 点赞 ';
+            setLikeButtonText(likeButton, liked);
         }
     };
 
@@ -118,10 +162,10 @@ function setupBlogInteractions() {
 
     if (likeButton) {
         likeButton.addEventListener('click', () => {
-            const liked = localStorage.getItem(likedKey) === 'true';
-            const count = Number(localStorage.getItem(likeKey) || '0');
-            localStorage.setItem(likedKey, String(!liked));
-            localStorage.setItem(likeKey, String(Math.max(0, count + (liked ? -1 : 1))));
+            const liked = storage.getItem(likedKey) === 'true';
+            const count = Number(storage.getItem(likeKey) || '0');
+            storage.setItem(likedKey, String(!liked));
+            storage.setItem(likeKey, String(Math.max(0, count + (liked ? -1 : 1))));
             updateLikeView();
         });
     }
@@ -140,7 +184,7 @@ function setupBlogInteractions() {
                 text,
                 createdAt: new Date().toLocaleString('zh-CN', { hour12: false })
             });
-            localStorage.setItem(commentsKey, JSON.stringify(comments.slice(0, 12)));
+            storage.setItem(commentsKey, JSON.stringify(comments.slice(0, 12)));
             commentForm.reset();
             renderComments(commentList, getComments());
         });
